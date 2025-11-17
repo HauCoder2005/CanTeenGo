@@ -100,8 +100,8 @@ public class userDaos {
 	
 	// function create new user -> register
 	public boolean register(userModels newUser) {
-		String sql = "INSERT INTO users (first_name, last_name, username, password, email, phone_number, role_id)" +
-					"VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO users (first_name, last_name, username, password, email, phone_number, role_id, active) " +
+	             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		try(Connection conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, newUser.getFirst_name());
@@ -110,7 +110,8 @@ public class userDaos {
 	        ps.setString(4, newUser.getPassword()); 
 	        ps.setString(5, newUser.getEmail());
 	        ps.setString(6, newUser.getPhone_number());
-	        ps.setLong(7, 2L); // TỰ ĐỘNG GÁN ROLE USER (id = 2)
+	        ps.setLong(7, 2L); // role id = 2
+	        ps.setBoolean(8, true); // active alway true if new user register
 
 	        int rows = ps.executeUpdate();
 	        return rows > 0;
@@ -124,21 +125,20 @@ public class userDaos {
 	
 	// function get all data user => getAllUser
 	public List<userModels> getAllUser() {
-		String sql = """
-				SELECT id, first_name, last_name, username ,email, phone_number FROM users WHERE role_id = 2
-			    """;
+		String sql = "SELECT id, first_name, last_name, username, email, phone_number, active FROM users WHERE role_id = 2";
 		List<userModels> userList = new ArrayList<>();
 		try(Connection conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery()) {
 			while (rs.next()) {
 				userModels user = new userModels(
-		                rs.getInt("id"),
-		                rs.getString("first_name"),
-		                rs.getString("last_name"),
-		                rs.getString("email"),
-		                rs.getString("phone_number"),
-		                rs.getString("username")
+					    rs.getInt("id"),
+					    rs.getString("first_name"),
+					    rs.getString("last_name"),
+					    rs.getString("username"),      
+					    rs.getString("email"),
+					    rs.getString("phone_number"),
+					    rs.getBoolean("active")
 		            );
 				userList.add(user);
 			}

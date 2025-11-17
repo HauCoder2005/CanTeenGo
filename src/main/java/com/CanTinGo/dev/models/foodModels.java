@@ -1,12 +1,30 @@
 package com.CanTinGo.dev.models;
 
 public class foodModels {
-	private int id = 0;
+	private Integer id = 0;
 	private String food_name = "";
 	private String description = "";
     private Double price = 0.0;
     private Boolean isAvailable = true;
-    private foodCategoryModels category;
+    private String image = "";
+    public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public foodModels(int id, String food_name, String description, Double price, Boolean isAvailable, String image,
+			foodCategoryModels category) {
+		super();
+		this.id = id;
+		this.food_name = food_name;
+		this.description = description;
+		this.price = price;
+		this.isAvailable = isAvailable;
+		this.image = image;
+		this.category = category;
+	}
+	private foodCategoryModels category;
 	public foodModels() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -21,10 +39,10 @@ public class foodModels {
 		this.isAvailable = isAvailable;
 		this.category = category;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getFood_name() {

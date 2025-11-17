@@ -8,7 +8,22 @@ public class userModels {
 	private String password = "";
 	private String email = "";
 	private String phone_number = "";
+	private boolean active = false;
 	private roleModels role;
+	
+	public userModels(int id, String first_name, String last_name, String username, String password, String email,
+			String phone_number, boolean active, roleModels role) {
+		super();
+		this.id = id;
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.phone_number = phone_number;
+		this.active = active;
+		this.role = role;
+	}
 	public userModels(int id, String first_name, String last_name, String username, String password, String email,
 			String phone_number, roleModels role) {
 		super();
@@ -21,7 +36,7 @@ public class userModels {
 		this.phone_number = phone_number;
 		this.role = role;
 	}
-	public userModels(int id, String first_name, String last_name, String email, String phone_number, String username) {
+	public userModels(int id, String first_name, String last_name, String email, String phone_number, String username, boolean active) {
 		super();
 		this.id = id;
 		this.first_name = first_name;
@@ -29,10 +44,17 @@ public class userModels {
 		this.email = email;
 		this.phone_number = phone_number;
 		this.username = username;
+		this.active = active;
 	}
 	public userModels() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	public int getId() {
 		return id;
