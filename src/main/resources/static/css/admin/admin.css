@@ -1,0 +1,195 @@
+/* ===== BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', sans-serif; background: #f8f9fc; color: #2c3e50; }
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.navbar .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #f1c40f, #f39c12);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+.nav-links a {
+    color: #ecf0f1;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+.nav-links a:hover, .nav-links a.active {
+    background: #f1c40f;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* ===== LAYOUT ===== */
+.admin-container {
+    display: flex;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    gap: 1.5rem;
+    min-height: calc(100vh - 180px);
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 260px;
+    background: #2c3e50;
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.sidebar h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #f1c40f;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #34495e;
+    padding-bottom: 0.5rem;
+}
+.sidebar ul li {
+    margin-bottom: 0.8rem;
+}
+.sidebar ul li a {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: #bdc3c7;
+    transition: 0.3s;
+}
+.sidebar ul li a:hover, .sidebar ul li a.active {
+    background: #f1c40f;
+    color: #2c3e50;
+    transform: translateX(5px);
+    font-weight: 600;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+    flex: 1;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.main-content h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+.card {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(52,152,219,0.3);
+    transition: 0.3s;
+}
+.card:hover { transform: translateY(-8px); }
+.card:nth-child(2) { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.card:nth-child(3) { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.card h3 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    border-top: 1px solid #eee;
+    margin-top: 2rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+    .admin-container { flex-direction: column; }
+    .sidebar { width: 100%; margin-bottom: 1.5rem; }
+    .nav-links { gap: 1rem; }
+}
+/* TABLE */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+}
+.table th, .table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+.table th {
+    background: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+.table tr:hover {
+    background: #f1f3f5;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+.btn-edit { background: #f1c40f; color: white; }
+.btn-delete { background: #e74c3c; color: white; }
+.btn-save { background: #27ae60; color: white; margin-top: 1rem; }
+.btn:hover { opacity: 0.9; }
+
+/* SETTINGS GRID */
+.settings-grid {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 600px;
+}
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.setting-item label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+.setting-item input[type="text"] {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}

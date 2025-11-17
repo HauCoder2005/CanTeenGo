@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/loadingPage.css}">
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="component/header :: mainHeader"></div>
+
+    <!-- Loading overlay -->
+    <div id="loading">Loading...</div>
+
+    <!-- Main body -->
+    <div th:replace="component/main :: mainBody"></div>
+
+    <!-- Footer -->
+    <div th:replace="component/footer :: mainFooter"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/loadingPage.js}"></script>
+</body>
+</html>

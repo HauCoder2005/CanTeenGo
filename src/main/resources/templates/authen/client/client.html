@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Client Page</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/loadingPage.css}">
+</head>
+<body>
+    <!-- Header -->
+    <div th:replace="fragments/header :: mainHeader"></div>
+
+    <!-- Loading overlay -->
+    <div id="loading">Loading...</div>
+
+    <!-- Main body -->
+    <div th:replace="fragments/main :: mainBody"></div>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: mainFooter"></div>
+
+    <!-- JS -->
+    <script th:src="@{/js/loadingPage.js}"></script>
+</body>
+</html>

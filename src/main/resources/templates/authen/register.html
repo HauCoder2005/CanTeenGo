@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký tài khoản</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 420px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .register-header h2 {
+            color: #333;
+            font-weight: 700;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .register-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 14px 14px 50px;
+            border: 2px solid #e1e1e1;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #4CAF50;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .input-group input:focus + i {
+            color: #4CAF50;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* POPUP LỖI */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            animation: popupShow 0.4s ease;
+        }
+
+        @keyframes popupShow {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .popup-icon {
+            font-size: 50px;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .popup h3 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .popup p {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .popup button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .popup button:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            .register-container { padding: 25px 20px; }
+            .input-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- POPUP LỖI -->
+<div class="popup-overlay" th:if="${popupError}" id="popupOverlay">
+    <div class="popup">
+        <div class="popup-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Lỗi đăng ký!</h3>
+        <p th:text="${popupError}"></p>
+        <button onclick="closePopup()">Đóng</button>
+    </div>
+</div>
+
+<div class="register-container">
+    <div class="register-header">
+        <h2>Đăng Ký Tài Khoản</h2>
+        <p>Tạo tài khoản mới để bắt đầu</p>
+    </div>
+
+    <form th:action="@{/register}" th:object="${user}" method="post">
+        <div class="input-row">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" th:field="*{first_name}" placeholder="Họ" required />
+            </div>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" th:field="*{last_name}" placeholder="Tên" required />
+            </div>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-user-tag"></i>
+            <input type="text" th:field="*{username}" placeholder="Tên đăng nhập" required />
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" th:field="*{password}" placeholder="Mật khẩu" required />
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required />
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" th:field="*{email}" placeholder="Email (không bắt buộc)" />
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-phone"></i>
+            <input type="text" th:field="*{phone_number}" placeholder="Số điện thoại (không bắt buộc)" />
+        </div>
+
+        <button type="submit" class="btn-register">
+            <i class="fas fa-user-plus"></i> Đăng Ký Ngay
+        </button>
+    </form>
+
+    <div class="login-link">
+        Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a>
+    </div>
+</div>
+
+<script>
+    // HIỆN POPUP KHI CÓ LỖI
+    document.addEventListener('DOMContentLoaded', function() {
+        const popup = document.getElementById('popupOverlay');
+        if (popup) {
+            popup.style.display = 'flex';
+        }
+    });
+
+    function closePopup() {
+        document.getElementById('popupOverlay').style.display = 'none';
+    }
+
+    // Thêm hiệu ứng focus cho input
+    document.querySelectorAll('.input-group input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.querySelector('i').style.color = '#4CAF50';
+        });
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.querySelector('i').style.color = '#aaa';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
