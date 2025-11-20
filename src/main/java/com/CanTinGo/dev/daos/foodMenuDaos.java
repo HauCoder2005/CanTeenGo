@@ -63,4 +63,30 @@ public class foodMenuDaos {
 
         return listFood;
     }
+    
+    // function add data food -> creatFood() 
+    public boolean createDataFood(foodModels food) {
+    	String sql = 
+    			"""
+    				INSERT INTO food(food_name, description, price, available_quantity, is_available, category_id)
+    				VALUES (?, ? ,? , ?, ?, ?);
+    			""";
+    	try(Connection conn = dataSource.getConnection();
+    		PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, food.getFood_name());
+            ps.setString(2, food.getDescription());
+            ps.setDouble(3, food.getPrice());
+            ps.setInt(4, food.getAvailable_quantity());
+            ps.setBoolean(5, food.getIsAvailable());
+            ps.setInt(6, food.getFoodCategory().getId());
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+    	}
+    	catch(SQLException e) {
+    		e.printStackTrace();
+        	return false;
+    	}
+    }
 }

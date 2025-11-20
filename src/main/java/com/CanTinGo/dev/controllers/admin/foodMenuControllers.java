@@ -21,6 +21,8 @@ public class foodMenuControllers {
     @Autowired
     private foodMenuDaos foodMenuDaos;
     
+    @Autowired 
+    private foodCategoryDaos categoryDaos;
     @GetMapping("")
     public String getTemplate() {
     	return "redirect:/food-menu/food";
@@ -31,6 +33,31 @@ public class foodMenuControllers {
     	List<foodModels> food = foodMenuDaos.getAllFoodWithCategory();
     	System.out.printf("Danh sách món ăn: ", food);
     	model.addAttribute("listFood", food);
+        model.addAttribute("food", new foodModels()); 
+    	model.addAttribute("categories", categoryDaos.getAllFoodCate());
     	return "authen/admin/menu-food";
     }
+    @PostMapping("/add-food")
+    public String createFoodMenu(
+            @RequestParam("food_name") String foodName,
+            @RequestParam("description") String description,
+            @RequestParam("price") Double price,
+            @RequestParam("available_quantity") Integer availableQuantity,
+            @RequestParam("category_id") Integer categoryId,
+            @RequestParam(value = "isAvailable", required = false) boolean isAvailable
+    ) {
+        foodModels food = new foodModels();
+        food.setFood_name(foodName);
+        food.setDescription(description);
+        food.setPrice(price);
+        food.setAvailable_quantity(availableQuantity);
+        food.setIsAvailable(isAvailable);
+
+        foodCategoryModels category = categoryDaos.getCateById(categoryId);
+        food.setFoodCategory(category);
+
+        foodMenuDaos.createDataFood(food);
+        return "redirect:/food-menu/food";
+    }
+
 }
