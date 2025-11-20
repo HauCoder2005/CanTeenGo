@@ -37,6 +37,7 @@ public class foodMenuControllers {
     	model.addAttribute("categories", categoryDaos.getAllFoodCate());
     	return "authen/admin/menu-food";
     }
+    
     @PostMapping("/add-food")
     public String createFoodMenu(
             @RequestParam("food_name") String foodName,
@@ -59,5 +60,15 @@ public class foodMenuControllers {
         foodMenuDaos.createDataFood(food);
         return "redirect:/food-menu/food";
     }
-
+    
+    @DeleteMapping("/delete-food/{id}/{category_id}")
+    public String deleteFood(@PathVariable int id, @PathVariable int categoryId, RedirectAttributes ra) {
+        boolean success = foodMenuDaos.deleteFoodByIdAndCategory(id, categoryId);
+        if(success) {
+            ra.addFlashAttribute("message", "Xoá món thành công!");
+        } else {
+            ra.addFlashAttribute("error", "Xoá món thất bại!");
+        }
+        return "redirect:/food-menu/food";
+    }
 }

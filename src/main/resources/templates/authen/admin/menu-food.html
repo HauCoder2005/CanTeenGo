@@ -258,6 +258,7 @@ body {
                             <th width="110">Mở bán</th>
                             <th width="130">Loại món ăn</th>
                             <th width="110">Số lượng</th>
+                            <th width="130">Chức năng </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -276,7 +277,18 @@ body {
                             </td>
                             <td th:text="${food.foodCategory.category_name}"></td>
                             <td th:text="${food.available_quantity}"></td>
-                        </tr>
+								<td>
+<a th:href="@{'/food-menu/edit-food/' + ${food.id}}" class="btn btn-sm btn-warning">Sửa</a>
+
+<form th:action="@{'/food-menu/delete-food/' + ${food.id} + '/' + ${food.foodCategory.id}}"
+      method="post" style="display:inline;">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <button type="submit" class="btn btn-sm btn-danger"
+            onclick="return confirm('Bạn có chắc muốn xoá?')">Xoá</button>
+</form>
+
+								</td>
+							</tr>
                     </tbody>
                 </table>
                 <div th:if="${listFood == null or #lists.isEmpty(listFood)}" class="text-center py-5 text-muted">

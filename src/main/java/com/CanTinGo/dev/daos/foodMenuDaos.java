@@ -89,4 +89,20 @@ public class foodMenuDaos {
         	return false;
     	}
     }
+    
+    // function help delete food by id or category_id => deleteFoodByIdAndCategory
+    public boolean deleteFoodByIdAndCategory(int id, int categoryId) {
+        String sql = "DELETE FROM food WHERE id = ? AND category_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.setInt(2, categoryId);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
