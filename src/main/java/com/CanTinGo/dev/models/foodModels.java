@@ -7,14 +7,33 @@ public class foodModels {
     private Double price = 0.0;
     private Boolean isAvailable = true;
     private String image = "";
-    public String getImage() {
+    private Integer available_quantity = 0;
+    public foodModels(Integer id, String food_name, String description, Double price, Boolean isAvailable, String image,
+			Integer available_quantity, foodCategoryModels foodCate) {
+		super();
+		this.id = id;
+		this.food_name = food_name;
+		this.description = description;
+		this.price = price;
+		this.isAvailable = isAvailable;
+		this.image = image;
+		this.available_quantity = available_quantity;
+		this.foodCategory = foodCate;
+	}
+	public Integer getAvailable_quantity() {
+		return available_quantity;
+	}
+	public void setAvailable_quantity(Integer available_quantity) {
+		this.available_quantity = available_quantity;
+	}
+	public String getImage() {
 		return image;
 	}
 	public void setImage(String image) {
 		this.image = image;
 	}
 	public foodModels(int id, String food_name, String description, Double price, Boolean isAvailable, String image,
-			foodCategoryModels category) {
+			foodCategoryModels foodCate) {
 		super();
 		this.id = id;
 		this.food_name = food_name;
@@ -22,22 +41,29 @@ public class foodModels {
 		this.price = price;
 		this.isAvailable = isAvailable;
 		this.image = image;
-		this.category = category;
+		this.foodCategory = foodCate;
 	}
-	private foodCategoryModels category;
+	private foodCategoryModels foodCategory;
 	public foodModels() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public foodModels(int id, String food_name, String description, Double price, Boolean isAvailable,
-			foodCategoryModels category) {
+			foodCategoryModels foodCate) {
 		super();
 		this.id = id;
 		this.food_name = food_name;
 		this.description = description;
 		this.price = price;
 		this.isAvailable = isAvailable;
-		this.category = category;
+		this.foodCategory = foodCate;
+	}
+
+	public foodCategoryModels getFoodCategory() {
+		return foodCategory;
+	}
+	public void setFoodCategory(foodCategoryModels foodCategory) {
+		this.foodCategory = foodCategory;
 	}
 	public Integer getId() {
 		return id;
@@ -69,10 +95,5 @@ public class foodModels {
 	public void setIsAvailable(Boolean isAvailable) {
 		this.isAvailable = isAvailable;
 	}
-	public foodCategoryModels getCategory() {
-		return category;
-	}
-	public void setCategory(foodCategoryModels category) {
-		this.category = category;
-	}
+
 }
