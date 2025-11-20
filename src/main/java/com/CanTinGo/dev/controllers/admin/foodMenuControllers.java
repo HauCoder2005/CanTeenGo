@@ -61,9 +61,9 @@ public class foodMenuControllers {
         return "redirect:/food-menu/food";
     }
     
-    @DeleteMapping("/delete-food/{id}/{category_id}")
-    public String deleteFood(@PathVariable int id, @PathVariable int categoryId, RedirectAttributes ra) {
-        boolean success = foodMenuDaos.deleteFoodByIdAndCategory(id, categoryId);
+    @DeleteMapping("/delete-food/{id}")
+    public String deleteFood(@PathVariable int id, RedirectAttributes ra) {
+        boolean success = foodMenuDaos.deleteFoodByIdAndCategory(id);
         if(success) {
             ra.addFlashAttribute("message", "Xoá món thành công!");
         } else {
@@ -71,4 +71,20 @@ public class foodMenuControllers {
         }
         return "redirect:/food-menu/food";
     }
+    
+	 // Ẩn món
+	    @PatchMapping("/food-menu/hide/{id}")
+	    public String hideFood(@PathVariable int id, RedirectAttributes ra) {
+	        foodMenuDaos.updateAvailable(id, false);
+	        ra.addFlashAttribute("successMessage", "Đã ẩn món thành công!");
+	        return "redirect:/food-menu";
+	    }
+	
+	    // Hiện lại món
+	    @PatchMapping("/food-menu/show/{id}")
+	    public String showFood(@PathVariable int id, RedirectAttributes ra) {
+	    	foodMenuDaos.updateAvailable(id, true);
+	        ra.addFlashAttribute("successMessage", "Đã hiện lại món lên menu!");
+	        return "redirect:/food-menu";
+	    }
 }

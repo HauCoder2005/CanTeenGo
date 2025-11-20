@@ -194,111 +194,124 @@ body {
 			<a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
 		</div>
 	</div>
-<div class="main-content">
-    <div class="topbar d-flex justify-content-between align-items-center mb-4">
-        <h1>Food Menu Management</h1>
-        <div class="user-info d-flex align-items-center gap-2">
-            <img th:src="@{/images/admin.jpg}" alt="Admin" width="40" class="rounded-circle">
-            <span>Admin</span>
-        </div>
-    </div>
+	<div class="main-content">
+		<div
+			class="topbar d-flex justify-content-between align-items-center mb-4">
+			<h1>Food Menu Management</h1>
+			<div class="user-info d-flex align-items-center gap-2">
+				<img th:src="@{/images/admin.jpg}" alt="Admin" width="40"
+					class="rounded-circle"> <span>Admin</span>
+			</div>
+		</div>
 
-    <div class="food-form mb-4">
-        <form th:action="@{/food-menu/add-food}" method="post" class="row g-3 align-items-end">
-            <div class="col-md-3">
-                <label class="form-label">Tên món</label>
-                <input type="text" name="food_name" class="form-control" placeholder="Nhập tên món ăn..." required>
-            </div>
-            <div class="col-md-3">
-                <label class="form-label">Mô tả</label>
-                <input type="text" name="description" class="form-control" placeholder="Nhập mô tả..." required>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Giá</label>
-                <input type="number" name="price" class="form-control" step="0.01" required>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Số lượng</label>
-                <input type="number" name="available_quantity" class="form-control" required>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Danh mục</label>
-                <select name="category_id" class="form-select" required>
-                    <option value="" disabled selected>Chọn danh mục</option>
-                    <option th:each="cate : ${categories}" th:value="${cate.id}" th:text="${cate.category_name}"></option>
-                </select>
-            </div>
-            <div class="col-md-2 d-flex align-items-center">
-            <div class="form-check mt-4">
-                <input class="form-check-input" type="checkbox" name="isAvailable" id="isAvailable" checked>
-                <label class="form-check-label" for="isAvailable">
-                    Mở bán
-                </label>
-            </div>
-        </div>
-            <div class="col-12 text-end">
-                <button type="submit" class="btn btn-primary">Thêm món</button>
-            </div>
-        </form>
-    </div>
+		<div class="food-form mb-4">
+			<form th:action="@{/food-menu/add-food}" method="post"
+				class="row g-3 align-items-end">
+				<div class="col-md-3">
+					<label class="form-label">Tên món</label> <input type="text"
+						name="food_name" class="form-control"
+						placeholder="Nhập tên món ăn..." required>
+				</div>
+				<div class="col-md-3">
+					<label class="form-label">Mô tả</label> <input type="text"
+						name="description" class="form-control"
+						placeholder="Nhập mô tả..." required>
+				</div>
+				<div class="col-md-2">
+					<label class="form-label">Giá</label> <input type="number"
+						name="price" class="form-control" step="0.01" required>
+				</div>
+				<div class="col-md-2">
+					<label class="form-label">Số lượng</label> <input type="number"
+						name="available_quantity" class="form-control" required>
+				</div>
+				<div class="col-md-2">
+					<label class="form-label">Danh mục</label> <select
+						name="category_id" class="form-select" required>
+						<option value="" disabled selected>Chọn danh mục</option>
+						<option th:each="cate : ${categories}" th:value="${cate.id}"
+							th:text="${cate.category_name}"></option>
+					</select>
+				</div>
+				<div class="col-md-2 d-flex align-items-center">
+					<div class="form-check mt-4">
+						<input class="form-check-input" type="checkbox" name="isAvailable"
+							id="isAvailable" checked> <label class="form-check-label"
+							for="isAvailable"> Mở bán </label>
+					</div>
+				</div>
+				<div class="col-12 text-end">
+					<button type="submit" class="btn btn-primary">Thêm món</button>
+				</div>
+			</form>
+		</div>
 
-    <div class="card">
-        <div class="card-header bg-primary text-white text-center">
-            <h5 class="mb-0">DANH SÁCH MÓN ĂN</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th width="80">STT</th>
-                            <th>Tên món</th>
-                            <th>Mô tả</th>
-                            <th width="130">Giá</th>
-                            <th width="110">Mở bán</th>
-                            <th width="130">Loại món ăn</th>
-                            <th width="110">Số lượng</th>
-                            <th width="130">Chức năng </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="food, stt : ${listFood}">
-                            <td th:text="${stt.index + 1}"></td>
-                            <td th:text="${food.food_name}"></td>
-                            <td th:text="${food.description}"></td>
-                            <td th:text="${food.price}"></td>
-                            <td class="text-center">
-                                <span th:if="${food.isAvailable}">
-                                    <i class="fa fa-check-circle text-success"></i>
-                                </span>
-                                <span th:unless="${food.isAvailable}">
-                                    <i class="fa fa-times-circle text-danger"></i>
-                                </span>
-                            </td>
-                            <td th:text="${food.foodCategory.category_name}"></td>
-                            <td th:text="${food.available_quantity}"></td>
-								<td>
-<a th:href="@{'/food-menu/edit-food/' + ${food.id}}" class="btn btn-sm btn-warning">Sửa</a>
-
-<form th:action="@{'/food-menu/delete-food/' + ${food.id} + '/' + ${food.foodCategory.id}}"
-      method="post" style="display:inline;">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <button type="submit" class="btn btn-sm btn-danger"
-            onclick="return confirm('Bạn có chắc muốn xoá?')">Xoá</button>
-</form>
-
-								</td>
+		<div class="card">
+			<div class="card-header bg-primary text-white text-center">
+				<h5 class="mb-0">DANH SÁCH MÓN ĂN</h5>
+			</div>
+			<div class="card-body p-0">
+				<div class="table-responsive">
+					<table class="table table-hover mb-0">
+						<thead class="table-dark">
+							<tr>
+								<th width="80">STT</th>
+								<th>Tên món</th>
+								<th>Mô tả</th>
+								<th width="130">Giá</th>
+								<th width="110">Mở bán</th>
+								<th width="130">Loại món ăn</th>
+								<th width="110">Số lượng</th>
+								<th width="130">Chức năng</th>
 							</tr>
-                    </tbody>
-                </table>
-                <div th:if="${listFood == null or #lists.isEmpty(listFood)}" class="text-center py-5 text-muted">
-                    <i class="fas fa-utensils fa-3x mb-3"></i>
-                    <p class="mb-0">Chưa có món ăn nào</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+						</thead>
+						<tbody>
+							<tr th:each="food, stt : ${listFood}">
+								<td th:text="${stt.index + 1}"></td>
+								<td th:text="${food.food_name}"></td>
+								<td th:text="${food.description}"></td>
+								<td th:text="${food.price}"></td>
+								<td class="text-center"><span th:if="${food.isAvailable}">
+										<i class="fa fa-check-circle text-success"></i>
+								</span> <span th:unless="${food.isAvailable}"> <i
+										class="fa fa-times-circle text-danger"></i>
+								</span></td>
+								<td th:text="${food.foodCategory.category_name}"></td>
+								<td th:text="${food.available_quantity}"></td>
+								<td><a th:href="@{'/food-menu/edit-food/' + ${food.id}}"
+									class="btn btn-sm btn-warning">Sửa</a> <!-- 1. Nút XOÁ CHỈ HIỆN KHI isAvailable = false (tức là đã ẩn rồi) -->
+									<form th:if="${!food.isAvailable}"
+										th:action="@{'/food-menu/delete-food/' + ${food.id}}"
+										method="post" style="display: inline;"
+										onsubmit="return confirm('Xoá vĩnh viễn món ăn này? Không thể khôi phục!')">
+
+										<input type="hidden" name="_method" value="delete"> <input
+											type="hidden" th:name="${_csrf.parameterName}"
+											th:value="${_csrf.token}" />
+
+										<button type="submit" class="btn btn-sm btn-danger">
+											Xoá</button>
+									</form> <!-- 2. Khi món vẫn đang bán (isAvailable = true) → hiện thông báo + nút bị disable -->
+									<span th:if="${food.isAvailable}" style="display: inline;"
+									title="Món đang được bán – không thể xoá trực tiếp">
+
+										<button type="button" class="btn btn-sm btn-secondary"
+											disabled style="opacity: 0.65; cursor: not-allowed;">
+											Đang bán</button> <small class="text-muted ms-1">(Ẩn trước khi
+											xoá)</small>
+								</span></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${listFood == null or #lists.isEmpty(listFood)}"
+						class="text-center py-5 text-muted">
+						<i class="fas fa-utensils fa-3x mb-3"></i>
+						<p class="mb-0">Chưa có món ăn nào</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

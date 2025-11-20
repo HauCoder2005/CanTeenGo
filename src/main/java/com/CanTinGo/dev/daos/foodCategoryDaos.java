@@ -107,4 +107,16 @@ public class foodCategoryDaos {
 	        return null;
 	    }
 	}
+	
+	public void updateAvailable(int id, boolean available) {
+	    String sql = "UPDATE food SET is_available = ? WHERE id = ?";
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setBoolean(1, available);
+	        ps.setInt(2, id);
+	        ps.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 }

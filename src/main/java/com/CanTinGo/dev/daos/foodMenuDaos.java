@@ -91,12 +91,13 @@ public class foodMenuDaos {
     }
     
     // function help delete food by id or category_id => deleteFoodByIdAndCategory
-    public boolean deleteFoodByIdAndCategory(int id, int categoryId) {
-        String sql = "DELETE FROM food WHERE id = ? AND category_id = ?";
+    public boolean deleteFoodByIdAndCategory(int id) {
+        String sql = "DELETE FROM food WHERE id = ? AND is_available = 0";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, id);
-            ps.setInt(2, categoryId);
+
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch (SQLException e) {
@@ -105,4 +106,17 @@ public class foodMenuDaos {
         }
     }
 
+    
+    // function edit food by id => editFoodById
+    public void updateAvailable(int id, boolean available) {
+        String sql = "UPDATE food SET is_available = ? WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, available);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
