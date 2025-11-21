@@ -125,29 +125,34 @@ public class userDaos {
 	
 	// function get all data user => getAllUser
 	public List<userModels> getAllUser() {
-		String sql = "SELECT * FROM users WHERE role_id = 2";
-		List<userModels> userList = new ArrayList<>();
-		try(Connection conn = dataSource.getConnection();
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery()) {
-			while (rs.next()) {
-				userModels user = new userModels(
-					    rs.getInt("id"),
-					    rs.getString("first_name"),
-					    rs.getString("last_name"),
-					    rs.getString("username"),      
-					    rs.getString("email"),
-					    rs.getString("phone_number"),
-					    rs.getBoolean("active")
-		            );
-				userList.add(user);
-			}
-		} 
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return userList;
+	    List<userModels> list = new ArrayList<>();
+	    String sql = "SELECT id, first_name, last_name, username, password, email, phone_number, active FROM users WHERE role_id = 2";
+
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            userModels u = new userModels();
+	            u.setId(rs.getInt("id"));
+	            u.setFirst_name(rs.getString("first_name"));
+	            u.setLast_name(rs.getString("last_name"));
+	            u.setUsername(rs.getString("username"));
+	            u.setPassword(rs.getString("password"));
+	            u.setEmail(rs.getString("email"));
+	            u.setPhone_number(rs.getString("phone_number"));
+	            u.setActive(rs.getBoolean("active"));
+
+	            list.add(u);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return list;
 	}
+
 	
 	// function delete user by id -> deleteUserById
 	public boolean deleteUserById(int id) {
