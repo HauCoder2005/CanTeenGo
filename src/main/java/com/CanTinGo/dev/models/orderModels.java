@@ -11,6 +11,8 @@ public class orderModels {
 	private String status = "";
     private List<orderItemModels> items;
 	private userModels users;
+	private String formattedDate;
+
 	public orderModels() {
 		super();
 		// TODO Auto-generated constructor stub

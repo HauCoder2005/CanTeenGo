@@ -227,5 +227,31 @@ public class foodMenuDaos {
         }
         return listFood;
     }
+    
+    public void updateQuantity(int foodId, int newQuantity) {
+        String sql = "UPDATE food SET available_quantity = ? WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, newQuantity);
+            ps.setInt(2, foodId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public int countAllFood() {
+        String sql = "SELECT COUNT(*) AS total FROM food";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) return rs.getInt("total");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
 }

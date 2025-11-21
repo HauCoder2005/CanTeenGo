@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,13 +118,78 @@ public class orderDaos {
             ps.setInt(1, order.getUsers().getId());
             ps.setBigDecimal(2, order.getTotal_price());
             ps.setString(3, order.getPayment_method());
-            ps.setString(4, order.getStatus() != null ? order.getStatus() : "pending");
+            ps.setString(4, (order.getStatus() != null && !order.getStatus().isEmpty()) ? order.getStatus() : "pending");
 
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 return rs.getInt(1); // trả về orderId vừa tạo
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public List<orderModels> getAllOrders() {
+        List<orderModels> orders = new ArrayList<>();
+        String sql = "SELECT id FROM orders ORDER BY order_date DESC";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while(rs.next()) {
+                // getOrderById đã set formattedDate
+                orders.add(getOrderById(rs.getInt("id")));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+    
+    public boolean updateOrderStatus(int orderId, String status) {
+        String sql = "UPDATE orders SET status = ? WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public int countAllOrders() {
+        String sql = "SELECT COUNT(*) AS total FROM orders";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) return rs.getInt("total");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public double getTodayRevenue() {
+        String sql = "SELECT SUM(total_price) AS revenue " +
+                     "FROM orders " +
+                     "WHERE order_date >= CAST(GETDATE() AS DATE) " +
+                     "AND order_date < DATEADD(day, 1, CAST(GETDATE() AS DATE))";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                // Lấy theo alias 'revenue' đã khai báo trong SQL
+                return rs.getDouble("revenue");
             }
 
         } catch (SQLException e) {

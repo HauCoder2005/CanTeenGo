@@ -4,21 +4,39 @@
     <meta charset="UTF-8">
     <title>Đặt hàng thành công</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
+    <style>
+        body { font-family: Arial, sans-serif; text-align:center; padding:50px; }
+        h1 { color:#28a745; }
+        table { width:80%; margin:20px auto; border-collapse:collapse; }
+        th, td { border:1px solid #ddd; padding:10px; }
+        th { background:#ff6600; color:white; }
+    </style>
 </head>
 <body>
-<header>
     <h1>Đặt hàng thành công!</h1>
-</header>
-
-<main style="padding:20px;">
     <p>Mã đơn hàng: <span th:text="${order.id}"></span></p>
-    <p>Tổng tiền: <span th:text="${#numbers.formatDecimal(order.total_price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></span></p>
-    <p>Trạng thái: <span th:text="${order.status}"></span></p>
-    <h3>Danh sách món:</h3>
-    <ul>
-        <li th:each="item : ${order.items}" th:text="${item.foods.food_name} + ' x' + ${item.quantity} + ' (' + ${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ)'"></li>
-    </ul>
-    <a href="/client/home">Quay lại trang chủ</a>
-</main>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Tên món</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${order.items}">
+                <td th:text="${item.foods.food_name}"></td>
+                <td th:text="${#numbers.formatDecimal(item.foods.price,1,'COMMA',2,'POINT')} + ' VNĐ'"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${#numbers.formatDecimal(item.price,1,'COMMA',2,'POINT')} + ' VNĐ'"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><strong>Tổng thanh toán: </strong><span th:text="${#numbers.formatDecimal(order.total_price,1,'COMMA',2,'POINT')} + ' VNĐ'"></span></p>
+
+    <a th:href="@{/client/home}">Quay lại thực đơn</a>
 </body>
 </html>

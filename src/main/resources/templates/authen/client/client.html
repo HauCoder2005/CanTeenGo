@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>Thực đơn hôm nay</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
+    
+    <!-- CSRF token -->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    
     <style>
         body { font-family: Arial, sans-serif; margin:0; padding:0; }
         header { background-color: #ff6600; color: white; padding:20px; display:flex; justify-content:space-between; align-items:center; }
@@ -17,11 +22,26 @@
         .food-card img { width:100%; height:150px; object-fit:cover; }
         .food-card h3 { margin:10px 0; font-size:18px; }
         .food-card p { margin:5px 0; color:#555; }
+        .food-card form { display:flex; flex-direction: column; align-items:center; gap:5px; }
+        .food-card form input[type=number] { width:50px; text-align:center; }
         .food-card form button { background-color:#ff6600; color:white; border:none; padding:10px 15px; margin:10px 0; cursor:pointer; border-radius:5px; }
         .food-card form button:hover { background-color:#e65c00; }
+
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
+
 <header>
     <h1>Thực đơn hôm nay</h1>
     <div style="display:flex; align-items:center;">
@@ -43,23 +63,53 @@
         <p th:text="'Giá: ' + ${#numbers.formatDecimal(food.price,1,'COMMA',2,'POINT')} + ' VNĐ'">Giá món</p>
         <p th:text="'Số lượng: ' + ${food.available_quantity}">Số lượng</p>
 
-        <form th:action="@{/order/cart/add}" method="post">
-            <input type="hidden" name="foodId" th:value="${food.id}">
-            <input type="number" name="quantity" value="1" min="1" max="${food.available_quantity}" style="width:50px;">
+        <form class="add-to-cart-form" th:attr="data-food-id=${food.id}">
+            <input type="number" name="quantity" value="1" min="1" th:attr="max=${food.available_quantity}">
             <button type="submit">Đặt món</button>
         </form>
     </div>
 </main>
 
+<div id="toast">Đã thêm vào giỏ hàng!</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    // Load số lượng giỏ hàng ban đầu
     fetch('/order/cart/count')
         .then(res => res.text())
         .then(count => {
             document.getElementById('cartCount').textContent = count;
         });
-});
 
+    // Thêm món vào giỏ hàng bằng AJAX
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const foodId = form.getAttribute('data-food-id');
+            const quantity = form.querySelector('input[name="quantity"]').value;
+
+            fetch('/order/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    [csrfHeader]: csrfToken
+                },
+                body: `foodId=${foodId}&quantity=${quantity}`
+            })
+            .then(res => res.text())
+            .then(count => {
+                document.getElementById('cartCount').textContent = count;
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 1500);
+            });
+        });
+    });
+});
 </script>
+
 </body>
 </html>

@@ -28,7 +28,7 @@ public class userDaos {
 	}
 	
 	// function check username -> findByUsername
-	public boolean findByUsername(String username) {
+	public boolean findByUsername(String username) {	
 		String sql = "SELECT COUNT(*) FROME users WHERE username=?";
 		try (Connection conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(sql)){
@@ -125,7 +125,7 @@ public class userDaos {
 	
 	// function get all data user => getAllUser
 	public List<userModels> getAllUser() {
-		String sql = "SELECT id, first_name, last_name, username, email, phone_number, active FROM users WHERE role_id = 2";
+		String sql = "SELECT * FROM users WHERE role_id = 2";
 		List<userModels> userList = new ArrayList<>();
 		try(Connection conn = dataSource.getConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -164,4 +164,21 @@ public class userDaos {
 	        throw new RuntimeException("Lỗi khi xóa người dùng ID = " + id, e);
 	    }
 	}
+	
+
+	public int countAllUsers() {
+	    String sql = "SELECT COUNT(*) AS total FROM users WHERE role_id = 2";
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        if (rs.next()) {
+	            return rs.getInt("total");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return 0;
+	}
+
 }

@@ -29,18 +29,21 @@ public class orderControllers {
    
     @Autowired
     private foodMenuDaos foodMenuDaos;
-    
     @PostMapping("/cart/add")
     @ResponseBody
     public String addToCart(@RequestParam int foodId, @RequestParam int quantity, HttpSession session) {
         List<orderItemModels> cart = (List<orderItemModels>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new ArrayList<>();
-        }
+        if (cart == null) cart = new ArrayList<>();
 
         foodModels food = foodMenuDaos.getFoodById(foodId);
-        boolean found = false;
+        if (food.getAvailable_quantity() < quantity) {
+            return "0"; // hết hàng
+        }
 
+        // giảm số lượng trong database
+        foodMenuDaos.updateQuantity(foodId, food.getAvailable_quantity() - quantity);
+
+        boolean found = false;
         for (orderItemModels item : cart) {
             if (item.getFoods().getId() == foodId) {
                 item.setQuantity(item.getQuantity() + quantity);
@@ -61,6 +64,8 @@ public class orderControllers {
         session.setAttribute("cart", cart);
         return String.valueOf(cart.size());
     }
+
+
 
     @GetMapping("/cart/count")
     @ResponseBody
