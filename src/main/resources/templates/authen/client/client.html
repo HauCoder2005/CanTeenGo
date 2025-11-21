@@ -5,21 +5,92 @@
     <title>Client Page</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/loadingPage.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #ff6600;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .food-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 220px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            overflow: hidden;
+        }
+        .food-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .food-card h3 {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .food-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .food-card button {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .food-card button:hover {
+            background-color: #e65c00;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <div th:replace="fragments/header :: mainHeader"></div>
 
-    <!-- Loading overlay -->
-    <div id="loading">Loading...</div>
+<header>
+    <h1>Thực đơn hôm nay</h1>
+    <div class="user-info" th:if="${firstName != null}">
+        <span th:text="'Xin chào, ' + ${firstName} + ' ' + ${lastName} + '!'"></span>
+    </div>
+</header>
 
-    <!-- Main body -->
-    <div th:replace="fragments/main :: mainBody"></div>
+<main>
+    <div th:each="food : ${listFood}" class="food-card">
+        <img th:src="@{'/images/' + ${food.image}}" alt="food image">
+        <h3 th:text="${food.food_name}">Tên món</h3>
+        <p th:text="'Giá: ' + ${#numbers.formatDecimal(food.price,1,'COMMA',2,'POINT')} + ' VNĐ'">Giá món</p>
+        <p th:text="'Số lượng: ' + ${food.available_quantity}">Số lượng</p>
+        <button type="button">Đặt món</button>
+    </div>
+</main>
 
-    <!-- Footer -->
-    <div th:replace="fragments/footer :: mainFooter"></div>
-
-    <!-- JS -->
-    <script th:src="@{/js/loadingPage.js}"></script>
 </body>
 </html>

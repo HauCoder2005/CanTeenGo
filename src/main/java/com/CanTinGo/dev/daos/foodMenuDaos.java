@@ -17,9 +17,10 @@ import com.CanTinGo.dev.models.foodCategoryModels;
 
 @Repository
 public class foodMenuDaos {
-	@Autowired
+    @Autowired
     private DataSource dataSource;
 
+    // Get all food items with their categories and images
     public List<foodModels> getAllFoodWithCategory() {
         String sql = """
                 SELECT f.id, f.food_name, f.description, f.price, 
@@ -36,43 +37,42 @@ public class foodMenuDaos {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-
-                // Tạo category model
+                // Create category object
                 foodCategoryModels cate = new foodCategoryModels(
                         rs.getInt("cate_id"),
                         rs.getString("category_name")
                 );
 
+                // Create food object
                 foodModels food = new foodModels();
                 food.setId(rs.getInt("id"));
                 food.setFood_name(rs.getString("food_name"));
                 food.setDescription(rs.getString("description"));
                 food.setPrice(rs.getDouble("price"));
                 food.setIsAvailable(rs.getBoolean("is_available"));
-                food.setImage(rs.getString("image"));
+                food.setImage(rs.getString("image")); // add image
                 food.setAvailable_quantity(rs.getInt("available_quantity"));
-                
                 food.setFoodCategory(cate);
 
                 listFood.add(food);
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi JOIN lấy danh sách món ăn & category: " + e.getMessage());
+            throw new RuntimeException("Error while joining food and category: " + e.getMessage());
         }
 
         return listFood;
     }
-    
-    // function add data food -> creatFood() 
+
+    // Insert new food item with image
     public boolean createDataFood(foodModels food) {
-    	String sql = 
-    			"""
-    				INSERT INTO food(food_name, description, price, available_quantity, is_available, category_id)
-    				VALUES (?, ? ,? , ?, ?, ?);
-    			""";
-    	try(Connection conn = dataSource.getConnection();
-    		PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = """
+                INSERT INTO food(food_name, description, price, available_quantity, is_available, category_id, image)
+                VALUES (?, ?, ?, ?, ?, ?, ?);
+                """;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, food.getFood_name());
             ps.setString(2, food.getDescription());
@@ -80,34 +80,32 @@ public class foodMenuDaos {
             ps.setInt(4, food.getAvailable_quantity());
             ps.setBoolean(5, food.getIsAvailable());
             ps.setInt(6, food.getFoodCategory().getId());
+            ps.setString(7, food.getImage()); // add image
 
-            int rows = ps.executeUpdate();
-            return rows > 0;
-    	}
-    	catch(SQLException e) {
-    		e.printStackTrace();
-        	return false;
-    	}
-    }
-    
-    // function help delete food by id or category_id => deleteFoodByIdAndCategory
-    public boolean deleteFoodByIdAndCategory(int id) {
-        String sql = "DELETE FROM food WHERE id = ? AND is_available = 0";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            return ps.executeUpdate() > 0;
 
-            ps.setInt(1, id);
-
-            int rows = ps.executeUpdate();
-            return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    
-    // function edit status by id => updateAvailable
+    // Delete food by ID if not available
+    public boolean deleteFoodByIdAndCategory(int id) {
+        String sql = "DELETE FROM food WHERE id = ? AND is_available = 0";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Update the availability status of a food item
     public void updateAvailable(int id, boolean available) {
         int value = available ? 1 : 0;
         String sql = "UPDATE food SET is_available = ? WHERE id = ?";
@@ -120,10 +118,9 @@ public class foodMenuDaos {
             e.printStackTrace();
         }
     }
-    
-    // function edit food by Id
-    public boolean updateFoodById(foodModels food) {
 
+    // Update food item by ID, including image
+    public boolean updateFoodById(foodModels food) {
         String sql = """
             UPDATE food
             SET food_name = ?, 
@@ -131,7 +128,8 @@ public class foodMenuDaos {
                 price = ?, 
                 available_quantity = ?, 
                 is_available = ?, 
-                category_id = ?
+                category_id = ?,
+                image = ?
             WHERE id = ?;
         """;
 
@@ -144,9 +142,10 @@ public class foodMenuDaos {
             ps.setInt(4, food.getAvailable_quantity());
             ps.setBoolean(5, food.getIsAvailable());
             ps.setInt(6, food.getFoodCategory().getId());
-            ps.setInt(7, food.getId());
+            ps.setString(7, food.getImage()); // add image
+            ps.setInt(8, food.getId());
 
-            return ps.executeUpdate() > 0;  
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -154,9 +153,9 @@ public class foodMenuDaos {
         }
     }
 
-    
+    // Get food by ID including category and image
     public foodModels getFoodById(int id) {
-        String sql = "SELECT f.*, c.id AS cate_id, c.category_name " +
+        String sql = "SELECT f.*, f.image, c.id AS cate_id, c.category_name " +
                      "FROM food f " +
                      "JOIN food_category c ON f.category_id = c.id " +
                      "WHERE f.id = ?";
@@ -176,6 +175,7 @@ public class foodMenuDaos {
                 food.setPrice(rs.getDouble("price"));
                 food.setAvailable_quantity(rs.getInt("available_quantity"));
                 food.setIsAvailable(rs.getBoolean("is_available"));
+                food.setImage(rs.getString("image")); // add image
 
                 foodCategoryModels cate = new foodCategoryModels();
                 cate.setId(rs.getInt("cate_id"));
@@ -190,5 +190,4 @@ public class foodMenuDaos {
         }
         return null;
     }
-
 }

@@ -114,18 +114,17 @@ public class SecurityConfig {
                     if (user == null) {
                         throw new BadCredentialsException("Invalid username/password");
                     }
-
                     String roleName = user.getRole().getRole_name();
                     if (!roleName.startsWith("ROLE_")) {
                         roleName = "ROLE_" + roleName;
                     }
-
                     List<GrantedAuthority> authorities = List.of(
                         new SimpleGrantedAuthority(roleName)
                     );
+                    CustomUserDetails customUser = new CustomUserDetails(user, authorities);
 
                     System.out.println("-> Đăng nhập thành công, quyền: " + roleName);
-                    return new UsernamePasswordAuthenticationToken(username, password, authorities);
+                    return new UsernamePasswordAuthenticationToken(customUser, password, authorities);
 
                 } catch (BadCredentialsException e) {
                     System.err.println("=> Sai tài khoản hoặc mật khẩu!");
@@ -143,6 +142,7 @@ public class SecurityConfig {
             }
         };
     }
+
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();

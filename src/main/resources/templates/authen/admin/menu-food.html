@@ -209,6 +209,11 @@ input:checked+.slider {
 input:checked+.slider:before {
 	transform: translateX(23px);
 }
+img {
+    object-fit: cover;
+    height: 80px; /* hoặc 100px tùy cột */
+    width: 80px;
+}
 </style>
 </head>
 <body>
@@ -244,7 +249,7 @@ input:checked+.slider:before {
 	</div>
 <div class="main-content">
     <div class="topbar d-flex justify-content-between align-items-center mb-4">
-        <h1>Food Menu Management</h1>
+        <h1>Quản lý món ăn</h1>
         <div class="user-info d-flex align-items-center gap-2">
             <img th:src="@{/images/admin.jpg}" width="40" class="rounded-circle" alt="Admin">
             <span>Admin</span>
@@ -253,7 +258,7 @@ input:checked+.slider:before {
 
     <div class="food-form mb-4">
         <form th:action="${foodEdit != null} ? @{'/food-menu/edit-food/' + ${foodEdit.id}} : @{/food-menu/add-food}"
-              method="post" class="row g-3 align-items-end">
+              method="post" class="row g-3 align-items-end" enctype="multipart/form-data">
 
             <div class="col-md-3">
                 <label class="form-label">Tên món</label>
@@ -273,7 +278,7 @@ input:checked+.slider:before {
             <div class="col-md-2">
                 <label class="form-label">Giá</label>
                 <input type="number" name="price" class="form-control"
-                       step="0.01"
+                       step="0.001"
                        th:value="${foodEdit != null} ? ${foodEdit.price} : ''"
                        required>
             </div>
@@ -297,6 +302,15 @@ input:checked+.slider:before {
                 </select>
             </div>
 
+            <!-- Upload ảnh -->
+            <div class="col-md-3">
+                <label class="form-label">Ảnh món ăn</label>
+                <input type="file" name="imageFile" class="form-control"
+                       th:required="${foodEdit == null}">
+                <div th:if="${foodEdit != null && foodEdit.image != null}" class="mt-2">
+                    <img th:src="@{'/images/' + ${foodEdit.image}}" alt="Ảnh món" width="100">
+                </div>
+            </div>
 
             <div class="col-12 text-end">
                 <button type="submit" class="btn btn-primary"
@@ -321,6 +335,7 @@ input:checked+.slider:before {
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th>
+                            <th>Ảnh</th>
                             <th>Tên món</th>
                             <th>Loại</th>
                             <th>Giá</th>
@@ -335,6 +350,9 @@ input:checked+.slider:before {
                             th:classappend="${foodEdit != null && f.id == foodEdit.id} ? 'table-warning'">
 
                             <td th:text="${f.id}"></td>
+                            <td>
+                                <img th:if="${f.image != null}" th:src="@{'/images/' + ${f.image}}" width="80" alt="Ảnh món">
+                            </td>
                             <td th:text="${f.food_name}"></td>
                             <td th:text="${f.foodCategory.category_name}"></td>
                             <td th:text="${f.price}"></td>
@@ -345,7 +363,6 @@ input:checked+.slider:before {
                                                              : '/food-menu/show/' + ${f.id}}"
                                       method="post">
                                     <input type="hidden" name="_method" value="patch">
-
                                     <label class="switch">
                                         <input type="checkbox"
                                                th:checked="${f.isAvailable}"
@@ -367,7 +384,7 @@ input:checked+.slider:before {
                                     <input type="hidden" name="_method" value="delete">
                                     <button type="submit" class="btn btn-danger btn-sm">Xoá</button>
                                 </form>
-
+                                
                                 <button class="btn btn-secondary btn-sm" disabled
                                         th:if="${f.isAvailable}">
                                     Đang bán
