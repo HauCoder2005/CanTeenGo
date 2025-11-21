@@ -72,19 +72,61 @@ public class foodMenuControllers {
         return "redirect:/food-menu/food";
     }
     
-    // ẨN món (AJAX)
+    // hide food 
     @PatchMapping("/hide/{id}")
-    @ResponseBody
     public String hideFood(@PathVariable int id) {
         foodMenuDaos.updateAvailable(id, false); 
         return "redirect:/food-menu/food";
     }
 
-    // HIỆN món (AJAX)
+    // show food
     @PatchMapping("/show/{id}")
-    @ResponseBody
     public String showFood(@PathVariable int id) {
         foodMenuDaos.updateAvailable(id, true);
         return "redirect:/food-menu/food";
     }
+    
+    
+   // Edit food By Id 
+    @PostMapping("/edit-food/{id}")
+    public String updateFood(
+            @PathVariable int id,
+            @RequestParam("food_name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("price") Double price,
+            @RequestParam("available_quantity") int quantity,
+            @RequestParam("category_id") int categoryId,
+            @RequestParam(value = "isAvailable", required = false) boolean isAvailable,
+            RedirectAttributes ra
+    ) {
+        foodModels food = new foodModels();
+        food.setId(id);
+        food.setFood_name(name);
+        food.setDescription(description);
+        food.setPrice(price);
+        food.setAvailable_quantity(quantity);
+        food.setIsAvailable(isAvailable);
+
+        foodCategoryModels cate = categoryDaos.getCateById(categoryId);
+        food.setFoodCategory(cate);
+
+        foodMenuDaos.updateFoodById(food);
+
+        ra.addFlashAttribute("message", "Cập nhật món thành công!");
+
+        return "redirect:/food-menu/food";
+    }
+    @GetMapping("/edit-food/{id}")
+    public String editFood(@PathVariable int id, Model model) {
+
+        foodModels food = foodMenuDaos.getFoodById(id);
+
+        model.addAttribute("foodEdit", food);   
+        model.addAttribute("listFood", foodMenuDaos.getAllFoodWithCategory());
+        model.addAttribute("categories", categoryDaos.getAllFoodCate());
+
+        return "authen/admin/menu-food";
+
+    }
+
 }

@@ -107,9 +107,8 @@ public class foodMenuDaos {
     }
 
     
-    // function edit food by id => editFoodById
+    // function edit status by id => updateAvailable
     public void updateAvailable(int id, boolean available) {
-        // Chuyển boolean sang 0 hoặc 1
         int value = available ? 1 : 0;
         String sql = "UPDATE food SET is_available = ? WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
@@ -121,4 +120,75 @@ public class foodMenuDaos {
             e.printStackTrace();
         }
     }
+    
+    // function edit food by Id
+    public boolean updateFoodById(foodModels food) {
+
+        String sql = """
+            UPDATE food
+            SET food_name = ?, 
+                description = ?, 
+                price = ?, 
+                available_quantity = ?, 
+                is_available = ?, 
+                category_id = ?
+            WHERE id = ?;
+        """;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, food.getFood_name());
+            ps.setString(2, food.getDescription());
+            ps.setDouble(3, food.getPrice());
+            ps.setInt(4, food.getAvailable_quantity());
+            ps.setBoolean(5, food.getIsAvailable());
+            ps.setInt(6, food.getFoodCategory().getId());
+            ps.setInt(7, food.getId());
+
+            return ps.executeUpdate() > 0;  
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    
+    public foodModels getFoodById(int id) {
+        String sql = "SELECT f.*, c.id AS cate_id, c.category_name " +
+                     "FROM food f " +
+                     "JOIN food_category c ON f.category_id = c.id " +
+                     "WHERE f.id = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                foodModels food = new foodModels();
+
+                food.setId(rs.getInt("id"));
+                food.setFood_name(rs.getString("food_name"));
+                food.setDescription(rs.getString("description"));
+                food.setPrice(rs.getDouble("price"));
+                food.setAvailable_quantity(rs.getInt("available_quantity"));
+                food.setIsAvailable(rs.getBoolean("is_available"));
+
+                foodCategoryModels cate = new foodCategoryModels();
+                cate.setId(rs.getInt("cate_id"));
+                cate.setCategory_name(rs.getString("category_name"));
+
+                food.setFoodCategory(cate);
+                return food;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
