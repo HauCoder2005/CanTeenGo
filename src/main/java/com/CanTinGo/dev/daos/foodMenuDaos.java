@@ -109,10 +109,12 @@ public class foodMenuDaos {
     
     // function edit food by id => editFoodById
     public void updateAvailable(int id, boolean available) {
+        // Chuyển boolean sang 0 hoặc 1
+        int value = available ? 1 : 0;
         String sql = "UPDATE food SET is_available = ? WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setBoolean(1, available);
+            ps.setInt(1, value);
             ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {

@@ -72,19 +72,19 @@ public class foodMenuControllers {
         return "redirect:/food-menu/food";
     }
     
-	 // Ẩn món
-	    @PatchMapping("/food-menu/hide/{id}")
-	    public String hideFood(@PathVariable int id, RedirectAttributes ra) {
-	        foodMenuDaos.updateAvailable(id, false);
-	        ra.addFlashAttribute("successMessage", "Đã ẩn món thành công!");
-	        return "redirect:/food-menu";
-	    }
-	
-	    // Hiện lại món
-	    @PatchMapping("/food-menu/show/{id}")
-	    public String showFood(@PathVariable int id, RedirectAttributes ra) {
-	    	foodMenuDaos.updateAvailable(id, true);
-	        ra.addFlashAttribute("successMessage", "Đã hiện lại món lên menu!");
-	        return "redirect:/food-menu";
-	    }
+    // ẨN món (AJAX)
+    @PatchMapping("/hide/{id}")
+    @ResponseBody
+    public String hideFood(@PathVariable int id) {
+        foodMenuDaos.updateAvailable(id, false); 
+        return "redirect:/food-menu/food";
+    }
+
+    // HIỆN món (AJAX)
+    @PatchMapping("/show/{id}")
+    @ResponseBody
+    public String showFood(@PathVariable int id) {
+        foodMenuDaos.updateAvailable(id, true);
+        return "redirect:/food-menu/food";
+    }
 }
