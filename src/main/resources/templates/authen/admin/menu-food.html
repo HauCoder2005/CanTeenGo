@@ -209,10 +209,11 @@ input:checked+.slider {
 input:checked+.slider:before {
 	transform: translateX(23px);
 }
+
 img {
-    object-fit: cover;
-    height: 80px; /* hoặc 100px tùy cột */
-    width: 80px;
+	object-fit: cover;
+	height: 80px; /* hoặc 100px tùy cột */
+	width: 80px;
 }
 </style>
 </head>
@@ -222,188 +223,179 @@ img {
 		<div class="sidebar-header">
 			<h3>CanTinGo</h3>
 		</div>
-<div class="sidebar-menu">
-    <a th:href="@{/admin/}"><i class="fas fa-tachometer-alt"></i><span>Bảng điều khiển</span></a>
-    <a th:href="@{/admin/users}"><i class="fas fa-users"></i><span>Người dùng</span></a>
-    <a href="#"><i class="fas fa-shopping-cart"></i><span>Đơn hàng</span></a>
+		<div class="sidebar-menu">
+			<a th:href="@{/admin/}"><i class="fas fa-tachometer-alt"></i><span>Bảng
+					điều khiển</span></a> <a th:href="@{/admin/users}"><i class="fas fa-users"></i><span>Người
+					dùng</span></a> <a href="#"><i class="fas fa-shopping-cart"></i><span>Đơn
+					hàng</span></a> <a class="d-flex justify-content-between align-items-center"
+				data-bs-toggle="collapse" href="#menuFood"> <span><i
+					class="fas fa-utensils"></i> Thực đơn</span> <i
+				class="fas fa-chevron-down"></i>
+			</a>
+			<div class="collapse" id="menuFood">
+				<a th:href="@{/food-category}"
+					class="ms-4 d-block py-1 text-white text-decoration-none">Quản
+					lý nhóm món ăn</a> <a th:href="@{/food-menu}"
+					class="ms-4 d-block py-1 text-white text-decoration-none">Thực
+					đơn món ăn</a> <a th:href="@{/combo}"
+					class="ms-4 d-block py-1 text-white text-decoration-none">Combo</a>
+			</div>
 
-    <a class="d-flex justify-content-between align-items-center"
-       data-bs-toggle="collapse" href="#menuFood"> 
-       <span><i class="fas fa-utensils"></i> Thực đơn</span> 
-       <i class="fas fa-chevron-down"></i>
-    </a>
-    <div class="collapse" id="menuFood">
-        <a th:href="@{/food-category}"
-           class="ms-4 d-block py-1 text-white text-decoration-none">Quản
-					lý nhóm món ăn</a>
-        <a th:href="@{/food-menu}"
-           class="ms-4 d-block py-1 text-white text-decoration-none">Thực đơn món ăn</a>
-        <a th:href="@{/combo}"
-           class="ms-4 d-block py-1 text-white text-decoration-none">Combo</a>
-    </div>
-
-    <a href="#"><i class="fas fa-chart-bar"></i><span>Báo cáo</span></a>
-    <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i><span>Đăng xuất</span></a>
-</div>
+			<a href="#"><i class="fas fa-chart-bar"></i><span>Báo cáo</span></a>
+			<a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i><span>Đăng
+					xuất</span></a>
+		</div>
 
 	</div>
-<div class="main-content">
-    <div class="topbar d-flex justify-content-between align-items-center mb-4">
-        <h1>Quản lý món ăn</h1>
-        <div class="user-info d-flex align-items-center gap-2">
-            <img th:src="@{/images/admin.jpg}" width="40" class="rounded-circle" alt="Admin">
-            <span>Admin</span>
-        </div>
-    </div>
+	<div class="main-content">
+		<div
+			class="topbar d-flex justify-content-between align-items-center mb-4">
+			<h1>Quản lý món ăn</h1>
+		</div>
 
-    <div class="food-form mb-4">
-        <form th:action="${foodEdit != null} ? @{'/food-menu/edit-food/' + ${foodEdit.id}} : @{/food-menu/add-food}"
-              method="post" class="row g-3 align-items-end" enctype="multipart/form-data">
+		<div class="food-form mb-4">
+			<form
+				th:action="${foodEdit != null} ? @{'/food-menu/edit-food/' + ${foodEdit.id}} : @{/food-menu/add-food}"
+				method="post" class="row g-3 align-items-end"
+				enctype="multipart/form-data">
 
-            <div class="col-md-3">
-                <label class="form-label">Tên món</label>
-                <input type="text" name="food_name" class="form-control"
-                       placeholder="Nhập tên món..."
-                       th:value="${foodEdit != null} ? ${foodEdit.food_name} : ''"
-                       required>
-            </div>
+				<div class="col-md-3">
+					<label class="form-label">Tên món</label> <input type="text"
+						name="food_name" class="form-control"
+						placeholder="Nhập tên món..."
+						th:value="${foodEdit != null} ? ${foodEdit.food_name} : ''"
+						required>
+				</div>
 
-            <div class="col-md-3">
-                <label class="form-label">Mô tả</label>
-                <input type="text" name="description" class="form-control"
-                       th:value="${foodEdit != null} ? ${foodEdit.description} : ''"
-                       placeholder="Nhập mô tả..." required>
-            </div>
+				<div class="col-md-3">
+					<label class="form-label">Mô tả</label> <input type="text"
+						name="description" class="form-control"
+						th:value="${foodEdit != null} ? ${foodEdit.description} : ''"
+						placeholder="Nhập mô tả..." required>
+				</div>
 
-            <div class="col-md-2">
-                <label class="form-label">Giá</label>
-                <input type="number" name="price" class="form-control"
-                       step="0.001"
-                       th:value="${foodEdit != null} ? ${foodEdit.price} : ''"
-                       required>
-            </div>
+				<div class="col-md-2">
+					<label class="form-label">Giá</label> <input type="number"
+						name="price" class="form-control" step="1000" min="0"
+						th:value="${foodEdit != null} ? ${foodEdit.price} : ''" required>
+				</div>
 
-            <div class="col-md-2">
-                <label class="form-label">Số lượng</label>
-                <input type="number" name="available_quantity" class="form-control"
-                       th:value="${foodEdit != null} ? ${foodEdit.available_quantity} : ''"
-                       required>
-            </div>
 
-            <div class="col-md-2">
-                <label class="form-label">Danh mục</label>
-                <select name="category_id" class="form-select" required>
-                    <option value="" disabled th:selected="${foodEdit == null}">Chọn danh mục</option>
-                    <option th:each="cate : ${categories}"
-                            th:value="${cate.id}"
-                            th:selected="${foodEdit != null && foodEdit.foodCategory.id == cate.id}"
-                            th:text="${cate.category_name}">
-                    </option>
-                </select>
-            </div>
+				<div class="col-md-2">
+					<label class="form-label">Số lượng</label> <input type="number"
+						name="available_quantity" class="form-control"
+						th:value="${foodEdit != null} ? ${foodEdit.available_quantity} : ''"
+						required>
+				</div>
 
-            <!-- Upload ảnh -->
-            <div class="col-md-3">
-                <label class="form-label">Ảnh món ăn</label>
-                <input type="file" name="imageFile" class="form-control"
-                       th:required="${foodEdit == null}">
-                <div th:if="${foodEdit != null && foodEdit.image != null}" class="mt-2">
-                    <img th:src="@{'/images/' + ${foodEdit.image}}" alt="Ảnh món" width="100">
-                </div>
-            </div>
+				<div class="col-md-2">
+					<label class="form-label">Danh mục</label> <select
+						name="category_id" class="form-select" required>
+						<option value="" disabled th:selected="${foodEdit == null}">Chọn
+							danh mục</option>
+						<option th:each="cate : ${categories}" th:value="${cate.id}"
+							th:selected="${foodEdit != null && foodEdit.foodCategory.id == cate.id}"
+							th:text="${cate.category_name}"></option>
+					</select>
+				</div>
 
-            <div class="col-12 text-end">
-                <button type="submit" class="btn btn-primary"
-                        th:text="${foodEdit != null} ? 'Cập nhật' : 'Thêm món'">
-                </button>
+				<!-- Upload ảnh -->
+				<div class="col-md-3">
+					<label class="form-label">Ảnh món ăn</label> <input type="file"
+						name="imageFile" class="form-control"
+						th:required="${foodEdit == null}">
+					<div th:if="${foodEdit != null && foodEdit.image != null}"
+						class="mt-2">
+						<img th:src="@{'/images/' + ${foodEdit.image}}" alt="Ảnh món"
+							width="100">
+					</div>
+				</div>
 
-                <a th:if="${foodEdit != null}" href="/food-menu/food" class="btn btn-secondary ms-2">
-                    Hủy chỉnh sửa
-                </a>
-            </div>
-        </form>
-    </div>
+				<div class="col-12 text-end">
+					<button type="submit" class="btn btn-primary"
+						th:text="${foodEdit != null} ? 'Cập nhật' : 'Thêm món'">
+					</button>
 
-    <div class="card">
-        <div class="card-header bg-primary text-white text-center">
-            <h5 class="mb-0">DANH SÁCH MÓN ĂN</h5>
-        </div>
+					<a th:if="${foodEdit != null}" href="/food-menu/food"
+						class="btn btn-secondary ms-2"> Hủy chỉnh sửa </a>
+				</div>
+			</form>
+		</div>
 
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Ảnh</th>
-                            <th>Tên món</th>
-                            <th>Loại</th>
-                            <th>Giá</th>
-                            <th>Số lượng</th>
-                            <th>Mở bán</th>
-                            <th>Chức năng</th>
-                        </tr>
-                    </thead>
+		<div class="card">
+			<div class="card-header bg-primary text-white text-center">
+				<h5 class="mb-0">DANH SÁCH MÓN ĂN</h5>
+			</div>
 
-                    <tbody>
-                        <tr th:each="f : ${listFood}"
-                            th:classappend="${foodEdit != null && f.id == foodEdit.id} ? 'table-warning'">
+			<div class="card-body p-0">
+				<div class="table-responsive">
+					<table class="table table-hover mb-0">
+						<thead class="table-dark">
+							<tr>
+								<th>ID</th>
+								<th>Ảnh</th>
+								<th>Tên món</th>
+								<th>Loại</th>
+								<th>Giá</th>
+								<th>Số lượng</th>
+								<th>Mở bán</th>
+								<th>Chức năng</th>
+							</tr>
+						</thead>
 
-                            <td th:text="${f.id}"></td>
-                            <td>
-                                <img th:if="${f.image != null}" th:src="@{'/images/' + ${f.image}}" width="80" alt="Ảnh món">
-                            </td>
-                            <td th:text="${f.food_name}"></td>
-                            <td th:text="${f.foodCategory.category_name}"></td>
-                            <td th:text="${f.price}"></td>
-                            <td th:text="${f.available_quantity}"></td>
+						<tbody>
+							<tr th:each="f, index : ${listFood}"
+								th:classappend="${foodEdit != null && f.id == foodEdit.id} ? 'table-warning'">
 
-                            <td>
-                                <form th:action="@{${f.isAvailable} ? '/food-menu/hide/' + ${f.id} 
+								<td th:text="${index.count}"></td>
+								<td><img th:if="${f.image != null}"
+									th:src="@{'/images/' + ${f.image}}" width="80" alt="Ảnh món">
+								</td>
+								<td th:text="${f.food_name}"></td>
+								<td th:text="${f.foodCategory.category_name}"></td>
+								<td th:text="${f.price}"></td>
+								<td th:text="${f.available_quantity}"></td>
+
+								<td>
+									<form
+										th:action="@{${f.isAvailable} ? '/food-menu/hide/' + ${f.id} 
                                                              : '/food-menu/show/' + ${f.id}}"
-                                      method="post">
-                                    <input type="hidden" name="_method" value="patch">
-                                    <label class="switch">
-                                        <input type="checkbox"
-                                               th:checked="${f.isAvailable}"
-                                               onchange="this.form.submit()">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </form>
-                            </td>
+										method="post">
+										<input type="hidden" name="_method" value="patch"> <label
+											class="switch"> <input type="checkbox"
+											th:checked="${f.isAvailable}" onchange="this.form.submit()">
+											<span class="slider round"></span>
+										</label>
+									</form>
+								</td>
 
-                            <td>
-                                <a th:href="@{'/food-menu/edit-food/' + ${f.id}}"
-                                   class="btn btn-warning btn-sm">Sửa</a>
+								<td><a th:href="@{'/food-menu/edit-food/' + ${f.id}}"
+									class="btn btn-warning btn-sm">Sửa</a>
 
-                                <form th:action="@{'/food-menu/delete-food/' + ${f.id}}"
-                                      method="post" class="d-inline-block"
-                                      th:if="${!f.isAvailable}"
-                                      onsubmit="return confirm('Xoá món này?');">
+									<form th:action="@{'/food-menu/delete-food/' + ${f.id}}"
+										method="post" class="d-inline-block" th:if="${!f.isAvailable}"
+										onsubmit="return confirm('Xoá món này?');">
 
-                                    <input type="hidden" name="_method" value="delete">
-                                    <button type="submit" class="btn btn-danger btn-sm">Xoá</button>
-                                </form>
-                                
-                                <button class="btn btn-secondary btn-sm" disabled
-                                        th:if="${f.isAvailable}">
-                                    Đang bán
-                                </button>
-                            </td>
+										<input type="hidden" name="_method" value="delete">
+										<button type="submit" class="btn btn-danger btn-sm">Xoá</button>
+									</form>
 
-                        </tr>
-                    </tbody>
-                </table>
+									<button class="btn btn-secondary btn-sm" disabled
+										th:if="${f.isAvailable}">Đang bán</button></td>
 
-                <div th:if="${#lists.isEmpty(listFood)}"
-                     class="text-center py-5 text-muted">
-                    <i class="fas fa-utensils fa-3x mb-3"></i>
-                    <p>Chưa có món ăn nào</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+							</tr>
+						</tbody>
+					</table>
+
+					<div th:if="${#lists.isEmpty(listFood)}"
+						class="text-center py-5 text-muted">
+						<i class="fas fa-utensils fa-3x mb-3"></i>
+						<p>Chưa có món ăn nào</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

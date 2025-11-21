@@ -1,18 +1,27 @@
 package com.CanTinGo.dev.models;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class orderModels {
 	private int id = 0;
     private LocalDateTime orderDate = LocalDateTime.now();
-	private Double total_price = 0.0;
+	private BigDecimal total_price;
 	private String payment_method = "";
 	private String status = "";
+    private List<orderItemModels> items;
 	private userModels users;
 	public orderModels() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public orderModels(int id, LocalDateTime orderDate, Double total_price, String payment_method, String status,
+	public List<orderItemModels> getItems() {
+		return items;
+	}
+	public void setItems(List<orderItemModels> items) {
+		this.items = items;
+	}
+	public orderModels(int id, LocalDateTime orderDate, BigDecimal total_price, String payment_method, String status,
 			userModels users) {
 		super();
 		this.id = id;
@@ -34,10 +43,10 @@ public class orderModels {
 	public void setOrderDate(LocalDateTime orderDate) {
 		this.orderDate = orderDate;
 	}
-	public Double getTotal_price() {
+	public BigDecimal getTotal_price() {
 		return total_price;
 	}
-	public void setTotal_price(Double total_price) {
+	public void setTotal_price(BigDecimal total_price) {
 		this.total_price = total_price;
 	}
 	public String getPayment_method() {

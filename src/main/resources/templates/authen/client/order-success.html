@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt hàng thành công</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+</head>
+<body>
+<header>
+    <h1>Đặt hàng thành công!</h1>
+</header>
+
+<main style="padding:20px;">
+    <p>Mã đơn hàng: <span th:text="${order.id}"></span></p>
+    <p>Tổng tiền: <span th:text="${#numbers.formatDecimal(order.total_price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></span></p>
+    <p>Trạng thái: <span th:text="${order.status}"></span></p>
+    <h3>Danh sách món:</h3>
+    <ul>
+        <li th:each="item : ${order.items}" th:text="${item.foods.food_name} + ' x' + ${item.quantity} + ' (' + ${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ)'"></li>
+    </ul>
+    <a href="/client/home">Quay lại trang chủ</a>
+</main>
+</body>
+</html>

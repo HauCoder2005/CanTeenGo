@@ -1,16 +1,18 @@
 package com.CanTinGo.dev.models;
 
+import java.math.BigDecimal;
+
 public class orderItemModels {
 	private int id = 0;
 	private int quantity = 0;
-	private Double price = 0.0;
+	private BigDecimal price ;
 	private orderModels orders;
 	private foodModels foods;
 	public orderItemModels() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public orderItemModels(int id, int quantity, Double price, orderModels orders, foodModels foods) {
+	public orderItemModels(int id, int quantity, BigDecimal price, orderModels orders, foodModels foods) {
 		super();
 		this.id = id;
 		this.quantity = quantity;
@@ -30,10 +32,10 @@ public class orderItemModels {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	public orderModels getOrders() {

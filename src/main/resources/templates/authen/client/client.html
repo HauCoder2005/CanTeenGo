@@ -2,83 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Client Page</title>
+    <title>Thực đơn hôm nay</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/loadingPage.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #ff6600;
-            color: white;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid white;
-        }
-        main {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
-        .food-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            width: 220px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
-            overflow: hidden;
-        }
-        .food-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-        .food-card h3 {
-            margin: 10px 0;
-            font-size: 18px;
-        }
-        .food-card p {
-            margin: 5px 0;
-            color: #555;
-        }
-        .food-card button {
-            background-color: #ff6600;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .food-card button:hover {
-            background-color: #e65c00;
-        }
+        body { font-family: Arial, sans-serif; margin:0; padding:0; }
+        header { background-color: #ff6600; color: white; padding:20px; display:flex; justify-content:space-between; align-items:center; }
+        .user-info { display:flex; align-items:center; gap:10px; }
+        .user-info img { width:40px; height:40px; border-radius:50%; object-fit:cover; border:2px solid white; }
+        .cart-icon { position:relative; margin-left:20px; cursor:pointer; }
+        .cart-icon img { width:35px; height:35px; }
+        .cart-count { position:absolute; top:-5px; right:-10px; background:red; color:white; border-radius:50%; padding:2px 6px; font-size:12px; }
+        main { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px; }
+        .food-card { border:1px solid #ddd; border-radius:8px; width:220px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; overflow:hidden; }
+        .food-card img { width:100%; height:150px; object-fit:cover; }
+        .food-card h3 { margin:10px 0; font-size:18px; }
+        .food-card p { margin:5px 0; color:#555; }
+        .food-card form button { background-color:#ff6600; color:white; border:none; padding:10px 15px; margin:10px 0; cursor:pointer; border-radius:5px; }
+        .food-card form button:hover { background-color:#e65c00; }
     </style>
 </head>
 <body>
-
 <header>
     <h1>Thực đơn hôm nay</h1>
-    <div class="user-info" th:if="${firstName != null}">
-        <span th:text="'Xin chào, ' + ${firstName} + ' ' + ${lastName} + '!'"></span>
+    <div style="display:flex; align-items:center;">
+        <div class="user-info" th:if="${firstName != null}">
+            <span th:text="'Xin chào, ' + ${firstName} + ' ' + ${lastName} + '!'"></span>
+        </div>
+        <a th:href="@{/order/cart}" class="cart-icon">
+            <img src="/images/cart-icon.png" alt="Giỏ hàng">
+            <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <a th:href="@{/logout}" style="margin-left:15px;color:white;">Logout</a>
     </div>
 </header>
 
@@ -88,9 +42,24 @@
         <h3 th:text="${food.food_name}">Tên món</h3>
         <p th:text="'Giá: ' + ${#numbers.formatDecimal(food.price,1,'COMMA',2,'POINT')} + ' VNĐ'">Giá món</p>
         <p th:text="'Số lượng: ' + ${food.available_quantity}">Số lượng</p>
-        <button type="button">Đặt món</button>
+
+        <form th:action="@{/order/cart/add}" method="post">
+            <input type="hidden" name="foodId" th:value="${food.id}">
+            <input type="number" name="quantity" value="1" min="1" max="${food.available_quantity}" style="width:50px;">
+            <button type="submit">Đặt món</button>
+        </form>
     </div>
 </main>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    fetch('/order/cart/count')
+        .then(res => res.text())
+        .then(count => {
+            document.getElementById('cartCount').textContent = count;
+        });
+});
+
+</script>
 </body>
 </html>

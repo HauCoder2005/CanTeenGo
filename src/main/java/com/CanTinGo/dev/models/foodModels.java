@@ -1,14 +1,16 @@
 package com.CanTinGo.dev.models;
 
+import java.math.BigDecimal;
+
 public class foodModels {
 	private Integer id = 0;
 	private String food_name = "";
 	private String description = "";
-    private Double price = 0.0;
+    private BigDecimal price ;
     private Boolean isAvailable = true;
     private String image = "";
     private Integer available_quantity = 0;
-    public foodModels(Integer id, String food_name, String description, Double price, Boolean isAvailable, String image,
+    public foodModels(Integer id, String food_name, String description, BigDecimal price, Boolean isAvailable, String image,
 			Integer available_quantity, foodCategoryModels foodCate) {
 		super();
 		this.id = id;
@@ -32,7 +34,7 @@ public class foodModels {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public foodModels(int id, String food_name, String description, Double price, Boolean isAvailable, String image,
+	public foodModels(int id, String food_name, String description, BigDecimal price, Boolean isAvailable, String image,
 			foodCategoryModels foodCate) {
 		super();
 		this.id = id;
@@ -48,7 +50,7 @@ public class foodModels {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public foodModels(int id, String food_name, String description, Double price, Boolean isAvailable,
+	public foodModels(int id, String food_name, String description, BigDecimal price, Boolean isAvailable,
 			foodCategoryModels foodCate) {
 		super();
 		this.id = id;
@@ -83,10 +85,10 @@ public class foodModels {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	public Boolean getIsAvailable() {

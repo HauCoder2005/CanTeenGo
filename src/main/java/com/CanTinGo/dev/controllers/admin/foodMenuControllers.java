@@ -2,6 +2,7 @@ package com.CanTinGo.dev.controllers.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -62,7 +63,7 @@ public class foodMenuControllers {
     public String createFoodMenu(
             @RequestParam("food_name") String foodName,
             @RequestParam("description") String description,
-            @RequestParam("price") Double price,
+            @RequestParam("price") BigDecimal price,
             @RequestParam("available_quantity") Integer availableQuantity,
             @RequestParam("category_id") Integer categoryId,
             @RequestParam(value = "isAvailable", required = false) Boolean isAvailable,
@@ -123,7 +124,7 @@ public class foodMenuControllers {
             @PathVariable int id,
             @RequestParam("food_name") String name,
             @RequestParam("description") String description,
-            @RequestParam("price") Double price,
+            @RequestParam("price") BigDecimal price,
             @RequestParam("available_quantity") int quantity,
             @RequestParam("category_id") int categoryId,
             @RequestParam(value = "isAvailable", required = false) Boolean isAvailable,

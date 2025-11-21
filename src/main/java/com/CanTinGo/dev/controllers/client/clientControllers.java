@@ -23,16 +23,15 @@ public class clientControllers {
 
     @GetMapping("/home")
     public String clientHome(Model model, Authentication authentication) {
-        List<foodModels> listFood = foodService.getAllFoodWithCategory();
+        List<foodModels> listFood = foodService.getAllFoodByActive();
         model.addAttribute("listFood", listFood);
         if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            String firstName = userDetails.getFirstName();
-            String lastName = userDetails.getLastName();
-            model.addAttribute("firstName", firstName);
-            model.addAttribute("lastName", lastName);
+            model.addAttribute("firstName", userDetails.getFirstName());
+            model.addAttribute("lastName", userDetails.getLastName());
         }
 
         return "authen/client/client"; 
     }
-}
+
+}  

@@ -48,7 +48,7 @@ public class foodMenuDaos {
                 food.setId(rs.getInt("id"));
                 food.setFood_name(rs.getString("food_name"));
                 food.setDescription(rs.getString("description"));
-                food.setPrice(rs.getDouble("price"));
+                food.setPrice(rs.getBigDecimal("price"));
                 food.setIsAvailable(rs.getBoolean("is_available"));
                 food.setImage(rs.getString("image")); // add image
                 food.setAvailable_quantity(rs.getInt("available_quantity"));
@@ -76,7 +76,7 @@ public class foodMenuDaos {
 
             ps.setString(1, food.getFood_name());
             ps.setString(2, food.getDescription());
-            ps.setDouble(3, food.getPrice());
+            ps.setBigDecimal(3, food.getPrice());
             ps.setInt(4, food.getAvailable_quantity());
             ps.setBoolean(5, food.getIsAvailable());
             ps.setInt(6, food.getFoodCategory().getId());
@@ -138,7 +138,7 @@ public class foodMenuDaos {
 
             ps.setString(1, food.getFood_name());
             ps.setString(2, food.getDescription());
-            ps.setDouble(3, food.getPrice());
+            ps.setBigDecimal(3, food.getPrice());
             ps.setInt(4, food.getAvailable_quantity());
             ps.setBoolean(5, food.getIsAvailable());
             ps.setInt(6, food.getFoodCategory().getId());
@@ -172,7 +172,7 @@ public class foodMenuDaos {
                 food.setId(rs.getInt("id"));
                 food.setFood_name(rs.getString("food_name"));
                 food.setDescription(rs.getString("description"));
-                food.setPrice(rs.getDouble("price"));
+                food.setPrice(rs.getBigDecimal("price"));
                 food.setAvailable_quantity(rs.getInt("available_quantity"));
                 food.setIsAvailable(rs.getBoolean("is_available"));
                 food.setImage(rs.getString("image")); // add image
@@ -190,4 +190,42 @@ public class foodMenuDaos {
         }
         return null;
     }
+    
+ // function get food by active = true
+    public List<foodModels> getAllFoodByActive() {
+        List<foodModels> listFood = new ArrayList<>();
+        String sql = "SELECT f.*, f.image, c.id AS cate_id, c.category_name " +
+                     "FROM food f " +
+                     "JOIN food_category c ON f.category_id = c.id " +
+                     "WHERE f.is_available = 1"; // chỉ lấy món đang bán
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                foodModels food = new foodModels();
+                food.setId(rs.getInt("id"));
+                food.setFood_name(rs.getString("food_name"));
+                food.setDescription(rs.getString("description"));
+                food.setPrice(rs.getBigDecimal("price"));
+                food.setAvailable_quantity(rs.getInt("available_quantity"));
+                food.setIsAvailable(rs.getBoolean("is_available"));
+                food.setImage(rs.getString("image"));
+
+                foodCategoryModels cate = new foodCategoryModels();
+                cate.setId(rs.getInt("cate_id"));
+                cate.setCategory_name(rs.getString("category_name"));
+
+                food.setFoodCategory(cate);
+
+                listFood.add(food);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listFood;
+    }
+
 }
