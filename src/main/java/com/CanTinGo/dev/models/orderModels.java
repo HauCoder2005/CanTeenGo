@@ -13,6 +13,12 @@ public class orderModels {
 	private userModels users;
 	private String formattedDate;
 
+	public String getFormattedDate() {
+		return formattedDate;
+	}
+	public void setFormattedDate(String formattedDate) {
+		this.formattedDate = formattedDate;
+	}
 	public orderModels() {
 		super();
 		// TODO Auto-generated constructor stub

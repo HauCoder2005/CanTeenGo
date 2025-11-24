@@ -216,14 +216,14 @@ body {
     <div class="sidebar-menu">
         <a th:href="@{/admin/}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
         <a th:href="@{/admin/users}"><i class="fas fa-users"></i><span>Người dùng</span></a>
-	<a th:href="@{/order/admin/data}"><i class="fas fa-shopping-cart"></i><span>Đơn hàng</span></a>
+			<a th:href="@{/order/admin/data}"><i class="fas fa-shopping-cart"></i><span>Đơn hàng</span></a>
 
         <a class="d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#menuFood">
             <span><i class="fas fa-utensils"></i> Thực đơn</span> <i class="fas fa-chevron-down"></i>
         </a>
         <div class="collapse" id="menuFood">
             <a th:href="@{/food-category}" class="ms-4 d-block py-1 text-white text-decoration-none">Quản lý nhóm món ăn</a>
-            <a th:href="@{/food-menu}" class="ms-4 d-block py-1 text-white text-decoration-none active">Quản lý món ăn</a>
+            <a th:href="@{/food-menu}" class="ms-4 d-block py-1 text-white text-decoration-none">Quản lý món ăn</a>
             <a th:href="@{/combo}" class="ms-4 d-block py-1 text-white text-decoration-none">Combo</a>
         </div>
 
