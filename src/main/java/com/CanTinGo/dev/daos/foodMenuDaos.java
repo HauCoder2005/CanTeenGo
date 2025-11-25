@@ -20,7 +20,7 @@ public class foodMenuDaos {
     @Autowired
     private DataSource dataSource;
 
-    // Get all food items with their categories and images
+    // Get all food items with their categories and images => getAllFoodWithCategory
     public List<foodModels> getAllFoodWithCategory() {
         String sql = """
                 SELECT f.id, f.food_name, f.description, f.price, 
@@ -37,13 +37,11 @@ public class foodMenuDaos {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                // Create category object
                 foodCategoryModels cate = new foodCategoryModels(
                         rs.getInt("cate_id"),
                         rs.getString("category_name")
                 );
 
-                // Create food object
                 foodModels food = new foodModels();
                 food.setId(rs.getInt("id"));
                 food.setFood_name(rs.getString("food_name"));
@@ -64,7 +62,7 @@ public class foodMenuDaos {
         return listFood;
     }
 
-    // Insert new food item with image
+    // Insert new food item with image => createDataFood
     public boolean createDataFood(foodModels food) {
         String sql = """
                 INSERT INTO food(food_name, description, price, available_quantity, is_available, category_id, image)
@@ -90,7 +88,7 @@ public class foodMenuDaos {
         }
     }
 
-    // Delete food by ID if not available
+    // Delete food by ID if not available => deleteFoodByIdAndCategory
     public boolean deleteFoodByIdAndCategory(int id) {
         String sql = "DELETE FROM food WHERE id = ? AND is_available = 0";
         try (Connection conn = dataSource.getConnection();
@@ -105,7 +103,7 @@ public class foodMenuDaos {
         }
     }
 
-    // Update the availability status of a food item
+    // Update the availability status of a food item => updateAvailable
     public void updateAvailable(int id, boolean available) {
         int value = available ? 1 : 0;
         String sql = "UPDATE food SET is_available = ? WHERE id = ?";
@@ -119,7 +117,7 @@ public class foodMenuDaos {
         }
     }
 
-    // Update food item by ID, including image
+    // Update food item by ID, including image => updateFoodById
     public boolean updateFoodById(foodModels food) {
         String sql = """
             UPDATE food
@@ -153,7 +151,7 @@ public class foodMenuDaos {
         }
     }
 
-    // Get food by ID including category and image
+    // Get food by ID including category and image => getFoodById
     public foodModels getFoodById(int id) {
         String sql = "SELECT f.*, f.image, c.id AS cate_id, c.category_name " +
                      "FROM food f " +
@@ -191,13 +189,13 @@ public class foodMenuDaos {
         return null;
     }
     
- // function get food by active = true
+ // function get food by active = true => getAllFoodByActive
     public List<foodModels> getAllFoodByActive() {
         List<foodModels> listFood = new ArrayList<>();
         String sql = "SELECT f.*, f.image, c.id AS cate_id, c.category_name " +
                      "FROM food f " +
                      "JOIN food_category c ON f.category_id = c.id " +
-                     "WHERE f.is_available = 1"; // chỉ lấy món đang bán
+                     "WHERE f.is_available = 1"; 
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -228,6 +226,7 @@ public class foodMenuDaos {
         return listFood;
     }
     
+    // function help update quantity of food if user buy food => updateQuantity
     public void updateQuantity(int foodId, int newQuantity) {
         String sql = "UPDATE food SET available_quantity = ? WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
@@ -240,6 +239,7 @@ public class foodMenuDaos {
         }
     }
     
+    // function help dashboard beautiful => countAllFood
     public int countAllFood() {
         String sql = "SELECT COUNT(*) AS total FROM food";
         try (Connection conn = dataSource.getConnection();

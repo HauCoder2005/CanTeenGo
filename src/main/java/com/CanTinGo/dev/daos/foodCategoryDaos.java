@@ -108,6 +108,7 @@ public class foodCategoryDaos {
 	    }
 	}
 	
+	// fuction update status food can open or off => updateAvailable
 	public void updateAvailable(int id, boolean available) {
 	    String sql = "UPDATE food SET is_available = ? WHERE id = ?";
 	    try (Connection conn = dataSource.getConnection();

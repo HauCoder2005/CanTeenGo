@@ -55,17 +55,16 @@ public class foodCateControllers {
         return "admin/edit-form"; 
     }
 
-    
-    @PostMapping("/edit-cates")
-    public String editCateFood(@ModelAttribute("category") foodCategoryModels cate, 
-    						   RedirectAttributes ra) {
-    	boolean edit = foodCateDaos.editCateFood(cate);
-    	if (edit) {
-            ra.addFlashAttribute("success", "Cập nhật thành công!");
-    	}
-    	else {
-            ra.addFlashAttribute("error", "Cập nhật thất bại!");
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") int id, Model model, RedirectAttributes ra) {
+        foodCategoryModels cate = foodCateDaos.getCateById(id); 
+        if (cate == null) {
+            ra.addFlashAttribute("error", "Không tìm thấy category!");
+            return "redirect:/food-category";
         }
-    	return "redirect:/food-category";
+        model.addAttribute("category", cate); 
+        model.addAttribute("listCate", foodCateDaos.getAllFoodCate()); 
+        return "authen/admin/food-category"; 
     }
 }

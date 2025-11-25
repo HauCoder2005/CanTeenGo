@@ -208,6 +208,27 @@ body {
 		margin-left: 80px;
 	}
 }
+
+tr:hover {
+	background-color: #f9f9f9;
+}
+
+.edit-btn:hover {
+	background-color: #1976D2 !important;
+}
+
+tr:hover {
+	background-color: #f5f9ff !important;
+}
+
+.edit-btn:hover {
+	background-color: #1976D2 !important;
+	transform: scale(1.05);
+}
+
+a[onclick*="confirm"]:hover {
+	background-color: #d32f2f !important;
+}
 </style>
 </head>
 <body>
@@ -242,7 +263,7 @@ body {
 	<div class="main-content">
 		<div class="topbar"
 			style="display: flex; justify-content: space-between; align-items: center;">
-			<h1>Quản lý món ăn</h1>
+			<h1>Quản lý loại món ăn</h1>
 			<div class="user-info"
 				style="display: flex; align-items: center; gap: 10px;">
 				<img src="/images/admin.jpg" alt="Admin"
@@ -252,66 +273,132 @@ body {
 		</div>
 
 		<!-- Flash messages -->
-		<div th:if="${message}"
-			style="margin-top: 15px; color: green; font-weight: bold;">
-			<p th:text="${message}"></p>
+		<div th:if="${success}"
+			style="margin-top: 15px; padding: 12px; background: #d4edda; color: #155724; border-radius: 6px; font-weight: bold;">
+			<p th:text="${success}"></p>
 		</div>
 		<div th:if="${error}"
-			style="margin-top: 15px; color: red; font-weight: bold;">
+			style="margin-top: 15px; padding: 12px; background: #f8d7da; color: #721c24; border-radius: 6px; font-weight: bold;">
 			<p th:text="${error}"></p>
 		</div>
 
+		<!-- Form thêm category -->
 		<form th:action="@{/food-category/add-category}" method="post"
 			style="margin-top: 20px; display: flex; gap: 10px;">
-			<input type="text" name="food_name" placeholder="Nhập tên category"
-				required
-				style="padding: 10px; border-radius: 8px; border: 1px solid #ccc; flex: 1;">
+			<input type="text" name="food_name"
+				placeholder="Nhập tên loại món ăn" required
+				style="padding: 10px; border-radius: 8px; border: 1px solid #ccc; flex: 1; font-size: 15px;">
 			<button type="submit"
-				style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s;"
-				onmouseover="this.style.backgroundColor='#45a049'"
-				onmouseout="this.style.backgroundColor='#4CAF50'">Thêm</button>
+				style="padding: 10px 25px; background-color: #4CAF50; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold;">
+				Thêm</button>
 		</form>
 
+		<!-- Bảng danh sách -->
 		<div class="category-table"
 			style="margin-top: 30px; overflow-x: auto;">
 			<table
-				style="width: 100%; border-collapse: collapse; text-align: center; font-family: Arial, sans-serif;">
+				style="width: 100%; border-collapse: collapse; text-align: center; font-family: Arial, sans-serif; min-width: 600px;">
 				<thead style="background-color: #f4f4f4;">
 					<tr>
-						<th style="padding: 12px; border-bottom: 2px solid #ddd;">ID</th>
-						<th style="padding: 12px; border-bottom: 2px solid #ddd;">Tên
+						<th style="padding: 14px; border-bottom: 2px solid #ddd;">ID</th>
+						<th style="padding: 14px; border-bottom: 2px solid #ddd;">Tên
 							loại món ăn</th>
-						<th style="padding: 12px; border-bottom: 2px solid #ddd;">Hành
+						<th style="padding: 14px; border-bottom: 2px solid #ddd;">Hành
 							động</th>
 					</tr>
 				</thead>
 				<tbody>
-					<!-- Sử dụng listCate giống với controller -->
 					<tr th:each="cat : ${listCate}"
 						style="transition: background 0.3s;">
-						<td style="padding: 10px; border-bottom: 1px solid #eee;"
+						<td style="padding: 12px; border-bottom: 1px solid #eee;"
 							th:text="${cat.id}"></td>
-						<td style="padding: 10px; border-bottom: 1px solid #eee;"
+						<td style="padding: 12px; border-bottom: 1px solid #eee;"
 							th:text="${cat.category_name}"></td>
 						<td
-							style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 10px;">
-							<a th:href="@{/food-category/edit/{id}(id=${cat.id})}"
-							style="padding: 6px 12px; background-color: #2196F3; color: white; border-radius: 50px; text-decoration: none;">
-								Sửa </a> <a th:href="@{/food-category/delete/{id}(id=${cat.id})}"
-							onclick="return confirm('Bạn có chắc muốn xóa?')"
-							style="padding: 6px 12px; background-color: #f44336; color: white; border-radius: 50px; text-decoration: none; transition: 0.3s;"
-							onmouseover="this.style.backgroundColor='#d32f2f'"
-							onmouseout="this.style.backgroundColor='#f44336'">Xóa</a>
+							style="padding: 12px; border-bottom: 1px solid #eee; display: flex; justify-content: center; gap: 12px;">
+
+							<!-- Nút Sửa (đã sửa lỗi th:attr) -->
+							<button type="button" class="edit-btn" th:data-id="${cat.id}"
+								th:data-name="${cat.category_name}"
+								style="padding: 7px 15px; background-color: #2196F3; color: white; border: none; border-radius: 50px; cursor: pointer; font-size: 14px;">
+								Sửa</button> <!-- Nút Xóa --> <a
+							th:href="@{/food-category/delete/{id}(id=${cat.id})}"
+							onclick="return confirm('Bạn có chắc chắn muốn xóa loại món ăn này không?')"
+							style="padding: 7px 15px; background-color: #f44336; color: white; border-radius: 50px; text-decoration: none; font-size: 14px;">
+								Xóa </a>
 						</td>
 					</tr>
+
 					<tr th:if="${#lists.isEmpty(listCate)}">
-						<td colspan="3" style="padding: 10px; color: gray;">Chưa có
-							loại món ăn nào</td>
+						<td colspan="3"
+							style="padding: 30px; color: #999; font-style: italic;">
+							Chưa có loại món ăn nào</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<!-- Modal Sửa Category -->
+	<div id="editModal"
+		style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.65); z-index: 9999; justify-content: center; align-items: center;">
+		<div
+			style="background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 420px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
+			<h2 style="margin: 0 0 20px 0; color: #333; text-align: center;">Sửa
+				loại món ăn</h2>
+
+			<form th:action="@{/food-category/edit-cates}" method="post">
+				<input type="hidden" name="id" id="editId">
+
+				<div style="margin-bottom: 18px;">
+					<label
+						style="display: block; margin-bottom: 8px; font-weight: bold; color: #444;">
+						Tên loại món ăn </label> <input type="text" name="category_name"
+						id="editName" required
+						style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px;"
+						placeholder="Nhập tên mới">
+				</div>
+
+				<div style="display: flex; gap: 12px; justify-content: flex-end;">
+					<button type="button" id="closeModal"
+						style="padding: 10px 20px; background: #ddd; color: #333; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+						Hủy</button>
+					<button type="submit"
+						style="padding: 10px 25px; background: #2196F3; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+						Cập nhật</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- JavaScript xử lý Modal -->
+	<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mở modal và điền dữ liệu
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+
+                document.getElementById('editId').value = id;
+                document.getElementById('editName').value = name;
+                document.getElementById('editModal').style.display = 'flex';
+            });
+        });
+
+        // Đóng modal
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('editModal').style.display = 'none';
+        });
+
+        // Đóng khi click bên ngoài
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+    });
+</script>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
